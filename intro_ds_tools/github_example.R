@@ -6,6 +6,6 @@ for (i in 0:222) {
     print('Hello World!')
   }
   
-  Sys.sleep(.5)
+  Sys.sleep(.25)
   
 }
