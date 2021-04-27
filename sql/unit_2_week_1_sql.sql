@@ -26,4 +26,10 @@ HAVING MAX(outstanding_amt)>10000
 --- 2. What metro area has the zip code with the largest population?
 
 
+select metro_city, max(zip) as max_zip
+from public.census_metro_data cmd 
+group by 1
+order by 2 desc
+
+
 
