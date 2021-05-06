@@ -48,7 +48,7 @@ summary(recent_grad_data)
 
 ################################################
 #
-# 4. It might be easier to see this is we make is a data frame: ---- 
+# 4. It might be easier to see this if we make is a data frame: ---- 
 #
 ############################################### 
 
