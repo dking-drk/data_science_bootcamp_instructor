@@ -26,3 +26,5 @@ my_data_frame <- data.frame(
 search_ad_data <- read.csv('C:/Users/daniel.king/Documents/personal/rework_academy/search_ad_data.csv')
 
 
+
+
