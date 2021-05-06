@@ -73,14 +73,16 @@ search_ad_data <- read.csv('./intro_to_r/search_ad_data.csv')
 #
 ############################
 
+# Writting is largely the same
+
 write.csv(search_ad_data, 
-          './intro_to_r /search_ad_data.csv', 
-            Row.names=F)
+          './intro_to_r/search_ad_data.csv', 
+            row.names=F)
           
 
 #############################
 #
-# 2. Accessing items in data 
+# 7. Accessing items in data 
 #
 ############################
 
@@ -88,7 +90,15 @@ just_names <- c("Cheyanne","Thomas","Manoj","Tara","Gabriel")
 
 just_names[3]
 
+just_one_column<-my_data_frame['student_name']
 
-just_one_column<-recent_grad_data['Non_college_jobs']
+also_one_column<-my_data_frame$student_name
+
+my_data_frame$here_is_a_new_column<-my_data_frame$student_name
+
+cheyanne<-as.character(my_data_frame[1,2])
+
+filtering<-my_data_frame[my_data_frame$id<=3,]
+
 
 
