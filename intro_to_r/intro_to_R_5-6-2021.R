@@ -64,11 +64,11 @@ danny_vector*long_vector
 ############################
 
 my_data_frame <- data.frame(
-  id = c(1:5), 
-  student_name = c("Cheyanne","Thomas","Manoj","Tara","Gabriel"), 
+  id = c(1:6), 
+  student_name = c("Cheyanne","Thomas","Manoj","Tara","Gabriel", "Cheyanne"), 
   birth_date = as.Date(c("1990-01-01", "1984-09-23", "1972-11-15", "1999-05-11",
-                         "1982-03-27")),
-  grades=c('A', 'B+', 'A-', 'A', 'A-')
+                         "1982-03-27", NA)),
+  grades=c('A', 'B+', 'A-', 'A', 'A-', NA)
 )
 
 
@@ -94,7 +94,6 @@ getwd()# first you want to make sure you know what your
 
 search_ad_data <- read.csv('./intro_to_r/search_ad_data.csv')
 
-
 #############################
 #
 # 6. Writing Data  ----
@@ -104,17 +103,17 @@ search_ad_data <- read.csv('./intro_to_r/search_ad_data.csv')
 # Writting is largely the same
 
 write.csv(search_ad_data, 
-          './intro_to_r/search_ad_data.csv', 
+          './intro_to_r/search_ad_data_2.csv', 
             row.names=F)
           
 
 #############################
 #
-# 7. Accessing items in data 
+# 7. Accessing items in data  ----
 #
 ############################
 
-just_names <- c("Cheyanne","Thomas","Manoj","Tara","Gabriel")
+just_names <- c("Cheyanne","Thomas","Manoj","Tara","Gabriel", "Cheyanne")
 
 just_names[3]
 
@@ -149,6 +148,10 @@ ave_cost_per_day<-aggregate(cost~date, search_ad_data, FUN=mean)# Aggregate
 # 9. DPLYR example: ---- 
 #
 ############################################### 
+
+github_raw_url="https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/recent-grads.csv"
+
+recent_grad_data<-read_csv(url(github_raw_url))
 
 new_dplyr_df <- search_ad_data %>% 
   group_by(date) %>% 
