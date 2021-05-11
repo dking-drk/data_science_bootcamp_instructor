@@ -82,7 +82,11 @@ new_dplyr_df <- search_ad_data %>%
            impressions != 0) | 
            year == 2021) %>% # Filter 
   arrange(desc(date)) %>% 
-  select(date, year, cost)
+  ungroup() %>% 
+  mutate(month=month(date, label=T)) %>%
+  group_by(year, month) %>%
+  summarize(cost=sum(cost, na.rm=T)) %>% 
+  spread(year, cost)
 
 
 ################################################
