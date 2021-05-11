@@ -129,9 +129,11 @@ filtering<-my_data_frame[my_data_frame$id<=3,]
 
 ################################################
 #
-# 8. Aggregate Funcitons: ---- 
+# 8. Aggregate Functions: ---- 
 #
 ############################################### 
+
+unique(search_ad_data$platform_id)
 
 table(search_ad_data$platform_id)# Count table with one variable
 
