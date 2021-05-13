@@ -145,6 +145,10 @@ table(search_ad_data$date,
 
 ave_cost_per_day<-aggregate(cost~date, search_ad_data, FUN=mean)# Aggregate 
 
+med_impressions_per_day<-aggregate(impressions~date, search_ad_data, FUN=median)
+
+
+
 ################################################
 #
 # 9. DPLYR example: ---- 
