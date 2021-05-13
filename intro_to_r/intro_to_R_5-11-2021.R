@@ -86,9 +86,11 @@ new_dplyr_df <- search_ad_data %>%
   mutate(month=month(date, label=T)) %>%
   group_by(year, month) %>%
   summarize(cost=sum(cost, na.rm=T)) %>% 
-  spread(year, cost)
+  spread(year, cost) %>% 
+  gather('year', 'births', 2:6) %>% 
+  distinct(year, .keep_all=T)
 
-
+    
 ################################################
 #
 # 4. Group By: ---- 
@@ -176,6 +178,66 @@ dates_birth <- births_data %>%
   group_by(year, month) %>%
   summarize(total_births=sum(births, na.rm=T)) %>% 
   spread(year, total_births)
+
+################################################
+#
+# 9. Gather: ---- 
+#
+############################################### 
+
+dates_birth <- births_data %>% 
+  gather('date_type', 'date_value', 2:4)
+
+################################################
+#
+# 10. Joins: ---- 
+#
+############################################### 
+
+git_grad='https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/recent-grads.csv'
+
+major_grad='https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/majors-list.csv'
+
+recent_grad_data<-read_csv(url(git_grad))
+
+major_data<-read_csv(url(major_grad))
+
+join_example <- recent_grad_data %>% 
+  mutate(major_code=as.character(Major_code)) %>%
+  inner_join(major_data, by=c('major_code'='FOD1P'))
+
+################################################
+#
+# 11. Distinct: ---- 
+#
+############################################### 
+
+dates_birth <- births_data %>% 
+  gather('date_type', 'date_value', 2:4) %>% 
+  distinct(year, .keep_all=T)
+
+################################################
+#
+# 11. Loops: ---- 
+#
+############################################### 
+
+for (i in 0:222) {
+  
+  print(paste0(i, " - 1", " = ", i-1))
+  
+  if (i == 222) {
+    print('Hello World!')
+  }
+  
+  Sys.sleep(.25)
+  
+}
+
+# Try creating a list of 5 items, and then lopping through each item and printing the name. 
+# HINT: You can use the print function to print elements in a vetor/list. 
+
+
 
 
 
