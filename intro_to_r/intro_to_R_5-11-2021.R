@@ -237,9 +237,48 @@ for (i in 0:222) {
   
 }
 
-# Try creating a list of 5 items, and then lopping through each item and printing the name. 
+# Create a list of 5 items, and then lopping through each item and printing the name. 
 # HINT: You can use the print function to print elements in a vetor/list. 
 
+################################################
+#
+# 11. Loops with Apply: ---- 
+#
+############################################### 
+
+lapply(just_names, print)
+
+number<-c(1:20)
+
+multiplication <- function(number) {
+  number * 2
+}
+
+lapply(number, FUN=multiplication)
+
+# Change the function to multiple by five and run the multiplication finction on the number list using lapply.
+
+################################################
+#
+# 11. GGplot: ---- 
+#
+############################################### 
+
+ggplot(yearly_births, aes(x=year, y=ave_births)) + 
+  geom_line(color='red') 
+#+ geom_bar(stat='identity')  
+
+################################################
+#
+# 12. Geom_line arguments: ---- 
+#
+############################################### 
+
+ggplot(yearly_births, aes(x=year, y=ave_births)) + 
+  geom_line(color='red', 
+            size=1.5, 
+            linetype='dashed') 
+   
 
 
 
