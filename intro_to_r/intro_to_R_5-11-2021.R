@@ -11,6 +11,7 @@ my_data_frame <- data.frame(
   grades=c('A', 'B+', 'A-', 'A', 'A-', NA)
 )
 
+
 search_ad_data <- read.csv('./intro_to_r/search_ad_data.csv')
 
 #############################
@@ -61,6 +62,10 @@ births_data<-read_csv(url(births_url))
 
 summary(births_data)
 
+
+gather('date_type', 'values', 2:4)
+# start new code 
+
 # Example with search_ad_data
 
 # Group by and summarize
@@ -71,24 +76,22 @@ new_dplyr_df <- search_ad_data %>%
             impressions=median(impressions, na.rm=T), 
             clicks=sum(clicks, na.rm=T), 
             visits=max(visits, na.rm=T), 
-            conversions=min(conversions, na.rm=T)) %>% # summary function will aggregate rows by grouping variable
+            conversions=min(conversions, na.rm=T)
+            ) %>% # summary function will aggregate rows by grouping variable
   mutate(cost_per_click=cost/clicks, 
          date=as.Date(date),
          year=as.character(year(date))) %>% # Mutate without a groupping variable
   group_by(year) %>% 
   mutate(annual_cost=sum(cost, na.rm=T),
          percent_of_cost=cost/annual_cost) %>%# Mutate with a grouping variable
-  filter((cost >= 100 & 
-           impressions != 0) | 
-           year == 2021) %>% # Filter 
   arrange(desc(date)) %>% 
   ungroup() %>% 
+  #select(date, cost, total_clicks=clicks, cost_per_click, percent_of_cost)
   mutate(month=month(date, label=T)) %>%
   group_by(year, month) %>%
   summarize(cost=sum(cost, na.rm=T)) %>% 
   spread(year, cost) %>% 
-  gather('year', 'births', 2:6) %>% 
-  distinct(year, .keep_all=T)
+  gather('year', 'total_cost', 2:6) 
 
     
 ################################################
@@ -121,7 +124,9 @@ dates_birth <- births_data %>%
                      '-',
                      month,
                      '-',
-                     date_of_month)))
+                     date_of_month)
+                     )
+         )
 
 ################################################
 #
@@ -135,7 +140,7 @@ dates_birth <- births_data %>%
                              month,
                              '-',
                              date_of_month))) %>% 
-  filter(year > 2000)
+  filter(year > 2002)
 
 ################################################
 #
@@ -176,8 +181,8 @@ dates_birth <- births_data %>%
 
 dates_birth <- births_data %>% 
   group_by(year, month) %>%
-  summarize(total_births=sum(births, na.rm=T)) %>% 
-  spread(year, total_births)
+  summarize(ave_births=mean(births, na.rm=T)) %>% 
+  spread(year, ave_births)
 
 ################################################
 #
@@ -202,9 +207,24 @@ recent_grad_data<-read_csv(url(git_grad))
 
 major_data<-read_csv(url(major_grad))
 
-join_example <- recent_grad_data %>% 
+major_category <- recent_grad_data %>% 
+  group_by(Major_category) %>% 
+  summarize(ave_share_women=mean(ShareWomen, 
+                                 na.rm=T), 
+            ave_unemployment_rate=mean(Unemployment_rate, 
+                                       na.rm=T)
+            )
+
+left_join_example <- recent_grad_data %>% 
   mutate(major_code=as.character(Major_code)) %>%
-  inner_join(major_data, by=c('major_code'='FOD1P'))
+  anti_join(major_data, by=c('major_code'='FOD1P'))
+
+
+anti_join_example <- major_data  %>%
+  anti_join(recent_grad_data %>% 
+              mutate(major_code=as.character(Major_code)), 
+            by=c('FOD1P'='major_code')
+            )
 
 ################################################
 #
@@ -234,9 +254,75 @@ for (i in 0:222) {
   
 }
 
-# Try creating a list of 5 items, and then lopping through each item and printing the name. 
+# Create a list of 5 items, and then lopping through each item and printing the name. 
 # HINT: You can use the print function to print elements in a vetor/list. 
 
+################################################
+#
+# 11. Loops with Apply: ---- 
+#
+############################################### 
+
+lapply(just_names, print)
+
+number<-c(1:20)
+
+multiplication <- function(number) {
+  number * 2
+}
+
+lapply(number, FUN=multiplication)
+
+# Change the function to multiple by five and run the multiplication finction on the number list using lapply.
+
+################################################
+#
+# 11. GGplot: ---- 
+#
+############################################### 
+
+ggplot(yearly_births, aes(x=year, y=ave_births)) + 
+  geom_bar(stat='identity')  
+
+ggplot(yearly_births, aes(x=year, y=ave_births)) + 
+  geom_line(color='blue') 
+
+################################################
+#
+# 12. Geom_line arguments: ---- 
+#
+############################################### 
+
+ggplot(yearly_births, aes(x=year, y=ave_births)) + 
+  geom_line(color='red', 
+            size=1.5, 
+            linetype='dashed'
+            ) 
+
+################################################
+#
+# 12. Labels arguments: ---- 
+#
+############################################### 
+
+ggplot(yearly_births, aes(x=year, y=ave_births)) + 
+  geom_line(color='red', 
+            size=1.5, 
+            linetype='dashed') + 
+  labs(title='Ave. Birth Per year', 
+       x='Year', 
+       y='Ave. Births')
+
+
+
+test <- search_ad_data %>% 
+  separate(date, 
+           c('year', 'month', 'day'), 
+           sep='-')
+
+
+separate(x, c("key", "value"), ": "
+   
 
 
 
