@@ -321,7 +321,17 @@ test <- search_ad_data %>%
            sep='-')
 
 
-separate(x, c("key", "value"), ": "
+recent_grad_data<- recent_grad_data %>% 
+  mutate(percent_low_wage=Low_wage_jobs/Total)
+
+
+ggplot(recent_grad_data, aes(x=Major, y=percent_low_wage)) + 
+  geom_bar(stat='identity') + 
+  labs(title='Percent of New Grads in Low Wage Jobs by Major', 
+       x='Major', 
+       y='% in Low Wage Jobs')
+         
+      
    
 
 
