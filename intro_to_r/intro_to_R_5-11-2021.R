@@ -250,7 +250,7 @@ for (i in 0:222) {
     print('Hello World!')
   }
   
-  Sys.sleep(.25)
+  Sys.sleep(.025)
   
 }
 
@@ -330,7 +330,21 @@ ggplot(recent_grad_data, aes(x=Major, y=percent_low_wage)) +
   labs(title='Percent of New Grads in Low Wage Jobs by Major', 
        x='Major', 
        y='% in Low Wage Jobs')
-         
+
+# Connecting dplyr data frames to ggplot         
+
+ow_wage_plot<-recent_grad_data %>%
+  mutate(low_wage_percent=Low_wage_jobs/Total) %>%
+  select(Major_category, low_wage_percent) %>%
+  group_by(Major_category) %>%
+  summarize (low_wage_percent=sum(low_wage_percent, na.rm=T))   %>%
+ggplot(aes(x=Major_category, y=low_wage_percent)) +
+  geom_bar(color="orange",
+           size=2,
+           stat="identity") +
+  labs(title='Graph of Low Wage Percent by Majors Category',
+       x='Major category',
+       y='Low Wage Percent') 
       
    
 

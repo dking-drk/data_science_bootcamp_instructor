@@ -10,6 +10,13 @@ births_data<-read_csv(url(births_url))
 # warm up, using the births_data df, 
 # create a new data frame grouping by year and find the mean, median, sum, max, and min for each year. 
 
+births_year <- births_data %>% 
+  group_by(year) %>% 
+  summarize(median_births=median(births, na.rm=T))
+
+ggplot(births_year, aes(x=year, y=median_births)) + 
+  geom_line(size=1.5)
+
 
 ################################################
 #
@@ -19,6 +26,7 @@ births_data<-read_csv(url(births_url))
 
 births_100 <- sample_n(births_data, 
                        100)
+
 x<-mean(births_100$births, 
         na.rm=T)
 
@@ -52,7 +60,8 @@ ci_function_base<- function(x, interval, n, st_dev) {
         )
 }
 
-ci_function(x, 1.96, n, st_dev)
+ci_function_base(x, 1.96, n, st_dev)
+
 
 ################################################
 #
@@ -89,7 +98,7 @@ ci_function_pro<- function(x, interval, n, st_dev) {
 
 shrinking_interval<-data.frame()
 
-# Loop through many iterations of sample sizes to see CI shrink
+# For Loop through many iterations of sample sizes to see CI shrink
 
 for(i in 30:3000) {
   
@@ -105,10 +114,12 @@ for(i in 30:3000) {
   st_dev<-sd(births_ci$births, 
              na.rm=T)
   
+  print(i)
+  
   # Create data frame
   
   shrinking_interval <- shrinking_interval %>% 
-    bind_rows(ci_function(x, 1.96, n=i, st_dev) )
+    bind_rows(ci_function_pro(x, 1.96, n=i, st_dev) )
     
 }
 
@@ -141,7 +152,7 @@ st_dev<-sd(births_100$births,
 
 # I want a CI of 1000 Births
 
-sample_size<- 2*(st_dev/(sqrt(1000)))#figured st_dev in line 27 of this code
+sample_size<- 2*((st_dev/(sqrt(10))))#figured st_dev in line 27 of this code
 
 true_mean<-mean(births_data$births, 
      na.rm=T)
@@ -162,10 +173,31 @@ ggplot(shrinking_interval, aes(x=sample_size, y=confidence, color=bound)) +
        y='Confidence Interval', 
        color='Bounds')
 
+################################################
+#
+# 4. Hypothesis Test: ---- 
+#
+############################################### 
 
+sample_median_hh_income<-read.csv('./mathematical_foundations/R/sample_median_hh_income.csv')
 
-ggplot(births_data, aes(births)) +
-  geom_histogram()
+x=mean(sample_median_hh_income$median_hh_income, 
+       na.rm=T)# mean
+
+sd=sd(sample_median_hh_income$median_hh_income, 
+      na.rm=T)# sd
+
+n=nrow(sample_median_hh_income)# n
+
+test_statistic<-(x-68000)/(sd/sqrt(n))
+
+# Do we accept the null hypothesis?
+
+if (abs(test_statistic > 1.64)) {
+  print('We accept the null hypothesis.')
+} else {
+  print('We cannot accept the null hypothesis.')
+}
 
 
 
