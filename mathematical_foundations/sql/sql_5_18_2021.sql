@@ -26,15 +26,20 @@ select 69186.080000000000 - ((1.96*32219.92234900)/sqrt(100)) ---- 62870.9752195
 
 --- Sample of 1000
 
+select count(*) 
+from census_metro_data_exp
+
 select avg(median_hh_income) as sample_mean, stddev(median_hh_income) as stddev 
 from (select median_hh_income as median_hh_income
 from census_metro_data_exp
 order by random()
 limit 1000) base 
 
-select 66922.748000000000 + ((1.96*33262.93584583)/sqrt(1000)) ---- 68984.4061231629
+select 66489.342000000000 + ((1.96*35312.87587183)/sqrt(1000)) ---- 68678.05672232143
 
-select 66922.748000000000 - ((1.96*33262.93584583)/sqrt(1000)) ---- 64861.08987683712
+select 66489.342000000000 - ((1.96*35312.87587183)/sqrt(1000)) ---- 64300.62727767858
+
+--- 64300.62727767858 -> 68678.05672232143 
 
 ---- Actual mean
 
@@ -65,5 +70,12 @@ where population > 0) base
 where (percent_under_18 > .1600 and percent_70_to_80 < .055) or
 (percent_under_18 < .1600 and percent_70_to_80 > .055)
 
+---- Get proportions from search_ad_data 
+
+select campaign, sum(conversions) as conversions, sum(clicks) as clicks
+from public.search_ad_data sad 
+inner join public.search_ad_campaigns sac on sad.campaign_id=sac.campaign_id
+where campaign in ('dirty_clothes', 'desk_organization')
+group by 1
 
 

@@ -193,11 +193,93 @@ test_statistic<-(x-68000)/(sd/sqrt(n))
 
 # Do we accept the null hypothesis?
 
-if (abs(test_statistic > 1.64)) {
+if (abs(test_statistic) > 1.96) {
   print('We accept the null hypothesis.')
 } else {
   print('We cannot accept the null hypothesis.')
 }
+
+################################################
+#
+# 5. One Sample T-Test: ---- 
+#
+############################################### 
+
+t.test(sample_median_hh_income$median_hh_income, 
+       mu=68000)
+
+################################################
+#
+# 6. Two Student Sample T-Test: ---- 
+#
+############################################### 
+
+ggplot(births_data, aes(x=births)) + 
+  geom_histogram() + 
+  labs(title='Births Per Day', 
+       y='Total Days', 
+       x='Total Births')
+
+t_test_births_df <- births_data %>% 
+  mutate(season=ifelse(month %in% c(1,2,3), 
+                       'winter', 
+                       ifelse(month %in% c(6,7,8), 
+                              'summer', 
+                              'other')
+                       )
+         ) %>% 
+  filter(season!='other')
+
+winter<-t_test_births_df %>% 
+  filter(season!='winter')
+
+summer<-t_test_births_df %>% 
+  filter(season!='summer')
+
+# Test for equal variance first 
+
+var<-var.test(winter$births, summer$births)
+
+if(var$p.value < .05) {
+  var=F
+} else { 
+  var=T}
+
+t.test(winter$births, summer$births, var.equal = var)
+
+################################################
+#
+# 6. Two Student Sample T-Test: ---- 
+#
+############################################### 
+
+# "campaign","conversions","clicks"
+# desk_organization,72241.79036798535,57375642
+# dirty_clothes,197403.74723294372,129139077
+
+
+prop.test(x = c(72241.79036798535, 197403.74723294372), 
+          n = c(57375642, 129139077))
+
+################################################
+#
+# 7. Correlation: ---- 
+#
+############################################### 
+
+git_grad='https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/recent-grads.csv'
+
+recent_grad_data<-read_csv(url(git_grad)) %>% 
+  mutate(perc_low_wage=Low_wage_jobs/Employed)
+
+ggplot(recent_grad_data, aes(x=ShareWomen, y=perc_low_wage)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm') + 
+  labs(title='The Relationship Between Share of Women Studying a Major and Post Graduate Low Wage Employment', 
+       x='% of Women', 
+       y='% Low Wage Employment')
+
+
 
 
 
