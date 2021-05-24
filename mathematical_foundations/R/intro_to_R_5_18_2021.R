@@ -142,10 +142,8 @@ ggplot(shrinking_interval, aes(x=sample_size, y=confidence, color=bound)) +
 
 # I want a CI of 1000 Births
 
-sample_size<- ((2*st_dev)/100)^2#figured st_dev in line 27 of this code
-
 births_100 <- sample_n(births_data, 
-                       sample_size)
+                       30)
 x<-mean(births_100$births, 
         na.rm=T)
 
@@ -154,10 +152,27 @@ n<-nrow(births_100)
 st_dev<-sd(births_100$births, 
            na.rm=T)
 
+sample_size<- ((2*st_dev)/500)^2#figured st_dev in line 27 of this code
+
+#### Run again with new interval 
+
+births_new_sample <- sample_n(births_data, 
+                       sample_size)
+
+x<-mean(births_new_sample$births, 
+        na.rm=T)
+
+n<-nrow(births_new_sample)
+
+st_dev<-sd(births_new_sample$births, 
+           na.rm=T)
+
+ci_function_base(x, 1.96, n, st_dev)
+
 true_mean<-mean(births_data$births, 
      na.rm=T)
 
-ci_function_base(x, 1.96, 4766, st_dev)
+
 
 ggplot(shrinking_interval, aes(x=sample_size, y=confidence, color=bound)) + 
   geom_line(size=1.5) + 
