@@ -152,12 +152,12 @@ n<-nrow(births_100)
 st_dev<-sd(births_100$births, 
            na.rm=T)
 
-sample_size<- ((2*st_dev)/500)^2#figured st_dev in line 27 of this code
+sample_size<- ((2*st_dev)/500)^2#figured st_dev above
 
 #### Run again with new interval 
 
 births_new_sample <- sample_n(births_data, 
-                       sample_size)
+                       round(sample_size,0))
 
 x<-mean(births_new_sample$births, 
         na.rm=T)
@@ -209,9 +209,9 @@ test_statistic<-(x-68000)/(sd/sqrt(n))
 # Do we accept the null hypothesis?
 
 if (abs(test_statistic) > 1.96) {
-  print('We accept the null hypothesis.')
+  print('We reject the null hypothesis.')
 } else {
-  print('We cannot accept the null hypothesis.')
+  print('Fail to reject the null hypothesis.')
 }
 
 ################################################
@@ -246,19 +246,19 @@ t_test_births_df <- births_data %>%
   filter(season!='other')
 
 winter<-t_test_births_df %>% 
-  filter(season!='winter')
+  filter(season=='winter')
 
 summer<-t_test_births_df %>% 
-  filter(season!='summer')
+  filter(season=='summer')
 
 # Test for equal variance first 
 
 var<-var.test(winter$births, summer$births)
 
 if(var$p.value < .05) {
-  var=F
+  var=T
 } else { 
-  var=T}
+  var=F}
 
 t.test(winter$births, summer$births, var.equal = var)
 
