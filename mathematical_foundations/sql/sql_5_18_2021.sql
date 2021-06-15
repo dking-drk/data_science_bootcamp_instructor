@@ -35,9 +35,9 @@ from census_metro_data_exp
 order by random()
 limit 1000) base 
 
-select 66489.342000000000 + ((1.96*35312.87587183)/sqrt(1000)) ---- 68678.05672232143
+select 64850.007000000000 + ((2*31836.56822654)/sqrt(1000)) ---- 66863.52836958428
 
-select 66489.342000000000 - ((1.96*35312.87587183)/sqrt(1000)) ---- 64300.62727767858
+select 64850.007000000000 - ((2*31836.56822654)/sqrt(1000)) ---- 62836.48563041572
 
 --- 64300.62727767858 -> 68678.05672232143 
 
@@ -77,5 +77,16 @@ from public.search_ad_data sad
 inner join public.search_ad_campaigns sac on sad.campaign_id=sac.campaign_id
 where campaign in ('dirty_clothes', 'desk_organization')
 group by 1
+
+
+select campaign, sum(conversions) as conversions, sum(clicks) as clicks
+from public.search_ad_data sad 
+inner join public.search_ad_campaigns sac on sad.campaign_id=sac.campaign_id
+where campaign in ('basket_buyer', 'ladder_collection')
+group by 1
+
+
+select distinct campaign
+from public.search_ad_campaigns 
 
 
