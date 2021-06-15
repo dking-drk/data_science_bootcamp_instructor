@@ -1,3 +1,9 @@
+# pip install statsmodels
+# pip install statistics
+# pip install scipy
+# pip install pandas
+# pip install numpy
+
 from scipy.stats import ttest_1samp
 from scipy import stats as st
 import pandas as pd
@@ -7,21 +13,37 @@ import numpy as np
 
 ############################
 #
+# F1 Score ----   
+#
+############################
+
+precision = 100/(110)
+
+recall = 100/(105)
+
+f1 = 2*((precision*recall)/(precision+recall))
+
+
+############################
+#
 # One sample T-Test ----   
 #
 ############################
 
 # read in median income data 
 
-median_income_data = pd.read_csv('./sample_median_hh_income.csv')  
-
+median_income_data = pd.read_csv('./data_science_bootcamp_instructor/machine_learning/intro/t_tests/t_tests/sample_median_hh_income.csv')
+ 
 # remember: the actual median household income in the US is 68000
 
 true_mean_hh_income=68000
 
 # Are these means equal?
 
-tscore, pvalue = ttest_1samp(median_income_data['median_hh_income'], popmean=68000)
+mean_hh_income = statistics.mean(median_income_data['median_hh_income'])
+
+tscore, pvalue = ttest_1samp(median_income_data['median_hh_income'], 
+                             popmean=68000)
 
 print("t Statistic: ", tscore)  
 print("P Value: ", pvalue)
