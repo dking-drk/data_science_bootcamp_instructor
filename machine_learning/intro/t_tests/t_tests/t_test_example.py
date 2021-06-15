@@ -32,7 +32,7 @@ f1 = 2*((precision*recall)/(precision+recall))
 
 # read in median income data 
 
-median_income_data = pd.read_csv('./data_science_bootcamp_instructor/machine_learning/intro/t_tests/t_tests/sample_median_hh_income.csv')
+median_income_data = pd.read_csv('../data_science_bootcamp_instructor/machine_learning/intro/t_tests/t_tests/sample_median_hh_income.csv')
  
 # remember: the actual median household income in the US is 68000
 
