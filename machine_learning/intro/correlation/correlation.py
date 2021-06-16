@@ -3,7 +3,35 @@ import statistics
 import matplotlib.pyplot as plt
 from plotnine import *
 import numpy as np
-from scipy.stats import pearsonr
+from scipy import stats as st
+
+############################
+#
+# One sample T-Test (warm up) ----   
+#
+############################
+
+# read in median income data 
+
+metro_pop_data = pd.read_csv('../data_science_bootcamp_instructor/machine_learning/intro/correlation/sample_metro_population.csv')
+
+true_mean_population=9434
+
+# Are these means equal?
+
+mean_population = statistics.mean(metro_pop_data['population'])
+
+tscore, pvalue = st.ttest_1samp(metro_pop_data['population'], 
+                             popmean=true_mean_population)
+
+print("t Statistic: ", tscore)  
+print("P Value: ", pvalue)
+
+############################
+#
+# Correlation ----   
+#
+############################
 
 # Pull in births data from Fivethirtyeight's Github
 
@@ -45,7 +73,7 @@ print(cov)
 
 # 4. Pearson Correlation Coefficient 
 
-corr, _ = pearsonr(grads_data['ShareWomen'], grads_data['Median'])
+corr, _ = st.pearsonr(grads_data['ShareWomen'], grads_data['Median'])
 
 print('Pearsons correlation: %.3f' % corr)
 
