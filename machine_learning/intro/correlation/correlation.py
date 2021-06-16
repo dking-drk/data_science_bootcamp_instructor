@@ -1,3 +1,5 @@
+# pip install plotnin
+
 import pandas as pd
 import statistics
 import matplotlib.pyplot as plt
@@ -76,4 +78,5 @@ print(cov)
 corr, _ = st.pearsonr(grads_data['ShareWomen'], grads_data['Median'])
 
 print('Pearsons correlation: %.3f' % corr)
+
 

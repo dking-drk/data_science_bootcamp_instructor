@@ -4,7 +4,6 @@
 # pip install pandas
 # pip install numpy
 
-from scipy.stats import ttest_1samp
 from scipy import stats as st
 import pandas as pd
 import statistics
@@ -42,7 +41,7 @@ true_mean_hh_income=68000
 
 mean_hh_income = statistics.mean(median_income_data['median_hh_income'])
 
-tscore, pvalue = ttest_1samp(median_income_data['median_hh_income'], 
+tscore, pvalue = st.ttest_1samp(median_income_data['median_hh_income'], 
                              popmean=68000)
 
 print("t Statistic: ", tscore)  
@@ -76,20 +75,12 @@ st.ttest_ind(a=winter['births'],
 #
 ############################
 
-# "campaign","conversions","clicks"
-# desk_organization,72241.79036798535,57375642
-# dirty_clothes,197403.74723294372,129139077
-
-#this is how the proportion looks in R
-#prop.test(x = c(72241.79036798535, 197403.74723294372), 
- #         n = c(57375642, 129139077))
-
 # can we assume anything from our sample
 significance = 0.025
 
 # This is how we identify our proportions in python
-sample_success_a, sample_size_a = (72241.79036798535, 57375642)
-sample_success_b, sample_size_b = (197403.74723294372, 129139077)
+sample_success_a, sample_size_a = (25, 50)
+sample_success_b, sample_size_b = (49, 50)
 
 # Identify numerator (successes) and denominator (sample)
 successes = np.array([sample_success_a, sample_success_b])
