@@ -9,7 +9,7 @@ titanic = data('titanic')
 
 election_data=data('presidentialElections')
 
-air_quality_data=data('Airq')
+air_passengers=data('AirPassengers')
 
 UKDriverDeaths=data('UKDriverDeaths')
 

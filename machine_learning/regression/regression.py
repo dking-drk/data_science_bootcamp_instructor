@@ -77,69 +77,24 @@ est = smf.ols(formula='Median ~ share_women_percent', data=grads_data).fit()
 
 est.summary()
 
-############################
-#
-# Multivariate Regression ----   
-#
-############################
+grads_data['unemployment_percent']=grads_data['Unemployment_rate']*100
 
-# Graph for multivariate regression
+est_2 = smf.ols(formula='Median ~ unemployment_percent', data=grads_data).fit() 
+
+est_2.summary()
 
 (
     ggplot(grads_data) +
-    geom_point(aes(x = 'ShareWomen', 
-                   y='Median', 
-               color='Unemployment_rate')) + 
+    geom_point(aes(x = 'unemployment_percent', 
+                   y='Median'), 
+               color='blue') + 
     geom_smooth(aes(x = 
-                    'ShareWomen',
+                    'unemployment_percent',
                     y = 'Median'), 
                 method='lm'
-    ) +
-    labs(
-        title ='Share of Women Majoring by Median Income of Major',
-        x = 'Share of Women in Major',
-        y = 'Median Income',
     ) 
     )
 
-# Run the OLS estimation for multivariate regression
-
-est_multiple = smf.ols(formula='Median ~ share_women_percent+Unemployment_rate', data=grads_data).fit() 
-
-est_multiple.summary()
-
-# Run Mutlivariate regression on your own
-
-est_births = smf.ols(formula='births ~ year+month', data=births_data).fit() 
-
-est_births.summary()
-
-############################
-#
-# Multivariate Regression with Factors ----   
-#
-############################
-
-(
-    ggplot(grads_data) +
-    geom_point(aes(x = 'ShareWomen', 
-                   y='Median')) + 
-    geom_smooth(aes(x = 
-                    'ShareWomen',
-                    y = 'Median'), 
-                method='lm'
-    ) +
-    labs(
-        title ='Share of Women Majoring by Median Income of Major',
-        x = 'Share of Women in Major',
-        y = 'Median Income',
-    ) + 
-    facet_wrap('~Major_category')
-    )
-
-est_multiple = smf.ols(formula='Median ~ share_women_percent+Major_category', data=grads_data).fit() 
-
-est_multiple.summary()
 
 
 

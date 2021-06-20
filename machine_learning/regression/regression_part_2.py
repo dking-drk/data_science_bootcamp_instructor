@@ -20,6 +20,8 @@ custom_theme=theme(panel_background = element_rect(fill = 'white'),
 
 bd_link='https://raw.githubusercontent.com/fivethirtyeight/data/master/bad-drivers/bad-drivers.csv'
 
+bad_drivers = pd.read_csv(bd_link)
+
 ############################
 #
 # Regression Project ----   
@@ -28,6 +30,130 @@ bd_link='https://raw.githubusercontent.com/fivethirtyeight/data/master/bad-drive
 
 women_emplyment=data('Mroz')
 
+############################
+#
+# Multivariate Regression ----   
+#
+############################
+
+# Graph for multivariate regression
+
+(
+    ggplot(grads_data) +
+    geom_point(aes(x = 'ShareWomen', 
+                   y='Median', 
+               color='Unemployment_rate')) + 
+    geom_smooth(aes(x = 
+                    'ShareWomen',
+                    y = 'Median'), 
+                method='lm'
+    ) +
+    labs(
+        title ='Share of Women Majoring by Median Income of Major',
+        x = 'Share of Women in Major',
+        y = 'Median Income',
+    ) 
+    )
+
+# Run the OLS estimation for multivariate regression
+
+est_multiple = smf.ols(formula='Median ~ share_women_percent+Unemployment_rate', data=grads_data).fit() 
+
+est_multiple.summary()
+
+# Run Mutlivariate regression on your own
+
+est_births = smf.ols(formula='births ~ year+month', data=births_data).fit() 
+
+est_births.summary()
+
+############################
+#
+# Multivariate Regression with Factors ----   
+#
+############################
+
+(
+    ggplot(grads_data) +
+    geom_point(aes(x = 'ShareWomen', 
+                   y='Median')) + 
+    geom_smooth(aes(x = 
+                    'ShareWomen',
+                    y = 'Median'), 
+                method='lm'
+    ) +
+    labs(
+        title ='Share of Women Majoring by Median Income of Major',
+        x = 'Share of Women in Major',
+        y = 'Median Income',
+    ) + 
+    facet_wrap('~Major_category')
+    )
+
+est_multiple = smf.ols(formula='Median ~ share_women_percent+Major_category', data=grads_data).fit() 
+
+est_multiple.summary()
+
+
+############################
+#
+# Binary Operators ----   
+#
+############################
+
+election_data=data('presidentialElections')
+
+election_data['is_south']=np.where(election_data['south']==True, 1, 0)
+
+(
+    ggplot(election_data) +
+    geom_point(aes(x = 'year', 
+                   y='demVote')) + 
+    geom_smooth(aes(x = 'year',
+                    y = 'demVote'), 
+                method='lm'
+    ) +
+    labs(
+        title ='Share of Democratice Vote 1932-2012',
+        x = 'Year',
+        y = 'Share of Democratic Vote',
+    ) + 
+    facet_wrap('~is_south') + 
+    custom_theme
+    )
+
+est_binary = smf.ols(formula='demVote ~ is_south+year', data=election_data).fit() 
+
+est_binary.summary()
+
+############################
+#
+# Polynomial Regression ----   
+#
+############################
+
+fit = np.polyfit(election_data['year'], election_data['demVote'], 2)
+equation = np.poly1d(fit)
+print ("The fit coefficients are a = {0:.4f}, b = {1:.4f} c = {2:.4f}".format(*fit))
+print (equation)
+
+election_data['polynomial']=(0.009066*election_data['year']**2)+(election_data['year']-35.92)+3.562e+04
+
+(
+    ggplot(election_data) +
+    geom_point(aes(x = 'polynomial', 
+                   y='demVote')) + 
+    geom_smooth(aes(x = 'polynomial',
+                    y = 'demVote'), 
+                method='lm'
+    ) +
+    labs(
+        title ='Share of Democratice Vote 1932-2012',
+        x = 'Year',
+        y = 'Share of Democratic Vote',
+    ) + 
+    custom_theme
+    )
 
 ############################
 #
