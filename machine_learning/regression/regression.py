@@ -3,7 +3,6 @@ from plotnine import *
 import statsmodels.formula.api as smf
 from scipy import stats as st
 from pydataset import data
-from pydataset import data
 
 ############################
 #
@@ -72,7 +71,9 @@ grads_data=grads_data[grads_data.ShareWomen.notnull()]
 
 # Run the OLS estimation for univariate regression
 
-est = smf.ols(formula='Median ~ ShareWomen', data=grads_data).fit() 
+grads_data['share_women_percent']=grads_data['ShareWomen']*100
+
+est = smf.ols(formula='Median ~ share_women_percent', data=grads_data).fit() 
 
 est.summary()
 
@@ -103,7 +104,7 @@ est.summary()
 
 # Run the OLS estimation for multivariate regression
 
-est_multiple = smf.ols(formula='Median ~ ShareWomen+Unemployment_rate', data=grads_data).fit() 
+est_multiple = smf.ols(formula='Median ~ share_women_percent+Unemployment_rate', data=grads_data).fit() 
 
 est_multiple.summary()
 
@@ -136,7 +137,7 @@ est_births.summary()
     facet_wrap('~Major_category')
     )
 
-est_multiple = smf.ols(formula='Median ~ ShareWomen+Major_category', data=grads_data).fit() 
+est_multiple = smf.ols(formula='Median ~ share_women_percent+Major_category', data=grads_data).fit() 
 
 est_multiple.summary()
 
