@@ -23,6 +23,14 @@ bd_link='https://raw.githubusercontent.com/fivethirtyeight/data/master/bad-drive
 
 bad_drivers = pd.read_csv(bd_link)
 
+bad_drivers=bad_drivers.rename(columns={"Car Insurance Premiums ($)": "car_insurance_premiums", 
+                               "Percentage Of Drivers Involved In Fatal Collisions Who Were Speeding": "percent_speeding_fatal"})
+
+insurance_est = smf.ols(formula='car_insurance_premiums ~ percent_speeding_fatal', 
+                data=bad_drivers).fit() 
+
+insurance_est.summary()
+
 ############################
 #
 # Regression Project ----   
