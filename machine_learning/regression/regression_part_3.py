@@ -16,7 +16,7 @@ custom_theme=theme(panel_background = element_rect(fill = 'white'),
 
 ############################
 #
-# Warm Up with bindary Operators ----   
+# Warm Up with bidary Operators ----   
 #
 ############################
 
@@ -40,8 +40,6 @@ election_data['is_south']=np.where(election_data['south']==True, 1, 0)
     facet_wrap('~is_south') + 
     custom_theme
     )
-
-election_data['is_south']=np.where(election_data['south']==True, 1, 0)
 
 est_binary = smf.ols(formula='demVote ~ is_south+year', data=election_data).fit() 
 
