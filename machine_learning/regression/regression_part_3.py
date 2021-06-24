@@ -153,7 +153,7 @@ fish_stock_data['is_post']=np.where(fish_stock_data['month']>'2010-01-01', 1, 0)
                    y='fish_stock', 
                color='state')) +
     labs(
-        title ='Fish Stocks in Nassachusetts & Maine 2000-2020',
+        title ='Fish Stocks in Massachusetts & Maine 2000-2020',
         x = 'Month',
         y = 'Fish Stock',
         color = 'State'
