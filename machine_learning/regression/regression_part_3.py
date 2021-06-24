@@ -198,15 +198,18 @@ births_data_30['date']=births_data_30['year'].astype(str) + '-' + births_data_30
 
 births_data_30['date']=pd.to_datetime(births_data_30['date'])
 
+births_data_30['week']=pd.to_datetime(births_data_30.date).dt.to_period('W').dt.to_timestamp()
+
+agg_30=births_data_30.groupby('week', as_index=False).agg({"error_rate": "mean"})
+
 (
-    ggplot(births_data_30) +
-    geom_point(aes(x = 'date', 
+    ggplot(agg_30) +
+    geom_line(aes(x = 'week', 
                    y='error_rate')) +
     labs(
-        title ='Fish Stocks in Nassachusetts & Maine 2000-2020',
-        x = 'Month',
-        y = 'Fish Stock',
-        color = 'State'
+        title ='Average Model Error Rate by Week',
+        x = 'Week',
+        y = 'Avg. Error Rate'
     )  + 
     custom_theme
     )
