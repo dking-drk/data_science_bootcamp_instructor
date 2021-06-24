@@ -20,6 +20,10 @@ custom_theme=theme(panel_background = element_rect(fill = 'white'),
 #
 ############################
 
+election_data=data('presidentialElections')
+
+election_data['is_south']=np.where(election_data['south']==True, 1, 0)
+
 (
     ggplot(election_data) +
     geom_point(aes(x = 'year', 
@@ -36,8 +40,6 @@ custom_theme=theme(panel_background = element_rect(fill = 'white'),
     facet_wrap('~is_south') + 
     custom_theme
     )
-
-election_data=data('presidentialElections')
 
 election_data['is_south']=np.where(election_data['south']==True, 1, 0)
 
