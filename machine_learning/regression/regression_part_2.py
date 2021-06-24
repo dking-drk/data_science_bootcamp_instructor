@@ -76,7 +76,7 @@ grads_data['unemployment_percent']=grads_data['Unemployment_rate']*100
 
 # Run the OLS estimation for multivariate regression
 
-est_multiple = smf.ols(formula='Median ~ share_women_percent+Unemployment_rate', data=grads_data).fit() 
+est_multiple = smf.ols(formula='Median ~ share_women_percent+unemployment_percent', data=grads_data).fit() 
 
 est_multiple.summary()
 
@@ -89,6 +89,18 @@ births_data = pd.read_csv(births_url)
 est_births = smf.ols(formula='births ~ year+month', data=births_data).fit() 
 
 est_births.summary()
+
+
+(
+    ggplot(births_data) +
+    geom_point(aes(x = 'year', 
+                   y='births')) + 
+    geom_smooth(aes(x = 
+                    'year',
+                    y = 'births'), 
+                method='lm'
+    ) 
+    )
 
 ############################
 #
@@ -149,90 +161,6 @@ est_binary = smf.ols(formula='demVote ~ is_south+year', data=election_data).fit(
 
 est_binary.summary()
 
-############################
-#
-# Fitting Curves ----   
-#
-############################
-
-(
-    ggplot(election_data) +
-    geom_point(aes(x = 'year', 
-                   y='demVote')) + 
-    geom_smooth(aes(x = 'year',
-                y='demVote'), 
-                method='lm') +
-    labs(
-        title ='Share of Democratice Vote 1932-2012',
-        x = 'Year',
-        y = 'Share of Democratic Vote',
-    ) + 
-    custom_theme
-    )
-
-dem_vote_yr = smf.ols('demVote~year', data=final_election_df).fit()
-
-dem_vote_yr.summary()
-
-(
-    ggplot(election_data) +
-    geom_point(aes(x = 'year', 
-                   y='demVote')) + 
-    geom_smooth(aes(x = 'year',
-                y='demVote'), 
-                method='loess') +
-    labs(
-        title ='Share of Democratice Vote 1932-2012',
-        x = 'Year',
-        y = 'Share of Democratic Vote',
-    ) + 
-    custom_theme
-    )
-
-# Create arrays for my x and y columns
-
-#Create single dimension
-x= election_data['year'][:,np.newaxis]
-y= election_data['demVote'][:,np.newaxis]
-
-inds = x.ravel().argsort()  # Sort x values and get index 
-x = x.ravel()[inds].reshape(-1,1)
-y = y[inds] #Sort y according to x sorted index
-
-#Plot
-plt.scatter(x,y)
-
-polynomial_features=PolynomialFeatures(degree=2)
-xp = polynomial_features.fit_transform(x)
-
-##################### Using statsmodel instead of formula
-
-import statsmodels.api as sm
-
-model = sm.OLS(y, xp).fit()
-model.summary()
-
-ypred = model.predict(xp) 
-
-plt.scatter(x,y)
-plt.plot(x,ypred)
-
-# Over fitting -------------------------------------
-
-polynomial_features=PolynomialFeatures(degree=50)
-xp = polynomial_features.fit_transform(x)
-
-##################### Using statsmodel instead of formula
-
-import statsmodels.api as sm
-
-model = sm.OLS(y, xp).fit()
-model.summary()
-
-ypred = model.predict(xp) 
-
-plt.scatter(x,y)
-plt.plot(x,ypred)
 
 
 

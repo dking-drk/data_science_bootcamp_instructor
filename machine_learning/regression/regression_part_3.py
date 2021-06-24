@@ -4,6 +4,8 @@ import statsmodels.formula.api as smf
 from scipy import stats as st
 from pydataset import data
 import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import PolynomialFeatures
 
 # Define plot themes 
 
@@ -17,6 +19,27 @@ custom_theme=theme(panel_background = element_rect(fill = 'white'),
 # Warm Up with bindary Operators ----   
 #
 ############################
+
+(
+    ggplot(election_data) +
+    geom_point(aes(x = 'year', 
+                   y='demVote')) + 
+    geom_smooth(aes(x = 'year',
+                    y = 'demVote'), 
+                method='lm'
+    ) +
+    labs(
+        title ='Share of Democratice Vote 1932-2012',
+        x = 'Year',
+        y = 'Share of Democratic Vote',
+    ) + 
+    facet_wrap('~is_south') + 
+    custom_theme
+    )
+
+election_data=data('presidentialElections')
+
+election_data['is_south']=np.where(election_data['south']==True, 1, 0)
 
 est_binary = smf.ols(formula='demVote ~ is_south+year', data=election_data).fit() 
 
@@ -43,7 +66,7 @@ est_binary.summary()
     custom_theme
     )
 
-dem_vote_yr = smf.ols('demVote~year', data=final_election_df).fit()
+dem_vote_yr = smf.ols('demVote~year', data=election_data).fit()
 
 dem_vote_yr.summary()
 
@@ -112,65 +135,36 @@ plt.plot(x,ypred)
 #
 ############################
 
-#### Create random data for dif-in-dif
+#### Pull in data for dif-in-dif model
 
-# mass_1
+fish_stock_data=pd.read_csv('./machine_learning/regression/dif_and_dif_data.csv') 
 
-fish_1 = np.random.randint(1, 100, size=121)
+fish_stock_data['month']= pd.to_datetime(fish_stock_data['month'])
 
-fish_df = pd.DataFrame(fish_1, columns=['total_fish'])
+fish_stock_data['is_mass']=np.where(fish_stock_data['state']=='Massachusetts', 1, 0)
 
-months=pd.date_range(start='2000-01-01',end='2010-01-01',freq='MS').to_frame()
-
-mass_1=pd.concat([months.reset_index(drop=True), fish_df], axis=1)
-
-mass_1['state'] = 'Massachusetts'
-
-# mass_2
-
-fish_2 = np.random.randint(50, 175, size=121)
-
-fish_df_2 = pd.DataFrame(fish_2, columns=['total_fish'])
-
-months_2=pd.date_range(start='2010-02-01',end='2020-02-01',freq='MS').to_frame()
-
-mass_2=pd.concat([months_2.reset_index(drop=True), fish_df_2], axis=1)
-
-mass_2['state'] = 'Massachusetts'
-
-full_mass = mass_1.append(mass_2)
-
-# maine_1
-
-fish = np.random.randint(1, 100, size=242)
-
-fish_maine = pd.DataFrame(fish, columns=['total_fish'])
-
-months_maine=pd.date_range(start='2000-01-01',end='2020-02-01',freq='MS').to_frame()
-
-maine=pd.concat([months_maine.reset_index(drop=True), fish_maine], axis=1)
-
-maine['state'] = 'Maine'
-
-full_fish_data=full_mass.append(maine)
-
-full_fish_data=full_fish_data.rename(columns={0: "month"})
+fish_stock_data['is_post']=np.where(fish_stock_data['month']>'2010-01-01', 1, 0)
 
 # Plot data 
 
 (
-    ggplot(full_fish_data) +
+    ggplot(fish_stock_data) +
     geom_point(aes(x = 'month', 
-                   y='total_fish', 
+                   y='fish_stock', 
                color='state')) +
     labs(
         title ='Fish Stocks in Nassachusetts & Maine 2000-2020',
         x = 'Month',
         y = 'Fish Stock',
         color = 'State'
-    ) +
+    )  + 
     custom_theme
     )
+
+dif_in_dif_est=smf.ols('fish_stock ~ date_number + is_mass*is_post', data=fish_stock_data).fit()
+
+dif_in_dif_est.summary()
+
 
 ############################
 #
@@ -178,7 +172,45 @@ full_fish_data=full_fish_data.rename(columns={0: "month"})
 #
 ############################
 
+births_url = "https://raw.githubusercontent.com/fivethirtyeight/data/master/births/US_births_2000-2014_SSA.csv"
 
-    
+births_data = pd.read_csv(births_url)
+
+est_births = smf.ols(formula='births ~ year+month', data=births_data).fit() 
+
+est_births.summary()
+
+# 70/30 split
+
+# Creating a dataframe with 70% of values
+births_data_70 = births_data.sample(frac = 0.70)
+  
+# Creating dataframe with with the other 30%
+births_data_30 = births_data.drop(per_70.index)
+
+births_data_train = smf.ols('births~year+month', data=births_data_70).fit()
+
+births_data_30['prediction'] = births_data_train.predict(births_data_30) 
+
+births_data_30['error_rate']=(births_data_30['prediction']-births_data_30['births'])/births_data_30['births']
+
+births_data_30['date']=births_data_30['year'].astype(str) + '-' + births_data_30['month'].astype(str) + '-' + births_data_30['date_of_month'].astype(str)
+
+births_data_30['date']=pd.to_datetime(births_data_30['date'])
+
+(
+    ggplot(births_data_30) +
+    geom_point(aes(x = 'date', 
+                   y='error_rate')) +
+    labs(
+        title ='Fish Stocks in Nassachusetts & Maine 2000-2020',
+        x = 'Month',
+        y = 'Fish Stock',
+        color = 'State'
+    )  + 
+    custom_theme
+    )
+
+# 1. What are some ways to improve this model? What other variables would we add?
 
 
