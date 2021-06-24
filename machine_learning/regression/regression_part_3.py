@@ -186,7 +186,7 @@ est_births.summary()
 births_data_70 = births_data.sample(frac = 0.70)
   
 # Creating dataframe with with the other 30%
-births_data_30 = births_data.drop(per_70.index)
+births_data_30 = births_data.drop(births_data_70.index)
 
 births_data_train = smf.ols('births~year+month', data=births_data_70).fit()
 
