@@ -98,7 +98,7 @@ y = y[inds] #Sort y according to x sorted index
 #Plot
 plt.scatter(x,y)
 
-polynomial_features=PolynomialFeatures(degree=2)
+polynomial_features=PolynomialFeatures(degree=3)
 xp = polynomial_features.fit_transform(x)
 
 ##################### Using statsmodel instead of formula

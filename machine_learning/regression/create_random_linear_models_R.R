@@ -78,7 +78,7 @@ ggplot(all_data, aes(x=month, y=fish_stock, color=state)) +
   geom_smooth(method='lm')
 
 write.csv(all_fish_data, 
-          './dif_and_dif_data.csv', 
+          './machine_learning/regression/dif_and_dif_data.csv', 
           row.names=F)
 
 
