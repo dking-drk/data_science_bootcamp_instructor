@@ -20,9 +20,20 @@ births_url = "https://raw.githubusercontent.com/fivethirtyeight/data/master/birt
 
 births_data = pd.read_csv(births_url)
 
+births_data['date']=births_data['year'].astype(str) + '-' + births_data['month'].astype(str) + '-' + births_data['date_of_month'].astype(str)
+
+births_data['date']=pd.to_datetime(births_data['date'])
+
 est_births = smf.ols(formula='births ~ year+month', data=births_data).fit() 
 
 est_births.summary()
+
+(
+    ggplot(births_data) +
+    geom_line(aes(x = 'date', 
+                   y='births')) +
+    custom_theme
+    )
 
 # 70/30 split
 
@@ -32,15 +43,11 @@ births_data_70 = births_data.sample(frac = 0.70)
 # Creating dataframe with with the other 30%
 births_data_30 = births_data.drop(births_data_70.index)
 
-births_data_train = smf.ols('births~year+month', data=births_data_70).fit()
+births_data_train = smf.ols('births~year+month+date_of_month', data=births_data_70).fit()
 
 births_data_30['prediction'] = births_data_train.predict(births_data_30) 
 
 births_data_30['error_rate']=(births_data_30['prediction']-births_data_30['births'])/births_data_30['births']
-
-births_data_30['date']=births_data_30['year'].astype(str) + '-' + births_data_30['month'].astype(str) + '-' + births_data_30['date_of_month'].astype(str)
-
-births_data_30['date']=pd.to_datetime(births_data_30['date'])
 
 births_data_30['week']=pd.to_datetime(births_data_30.date).dt.to_period('W').dt.to_timestamp()
 
