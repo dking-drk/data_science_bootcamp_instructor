@@ -45,6 +45,8 @@ births_data_30 = births_data.drop(births_data_70.index)
 
 births_data_train = smf.ols('births~year+month+date_of_month', data=births_data_70).fit()
 
+births_data_train.summary()
+
 births_data_30['prediction'] = births_data_train.predict(births_data_30) 
 
 births_data_30['error_rate']=(births_data_30['prediction']-births_data_30['births'])/births_data_30['births']
