@@ -48,10 +48,6 @@ mass_total<-mass_1 %>%
                    by='month'), 
          state='Massachusetts'))
 
-ggplot(mass_total, aes(x=month, y=fish_stock)) +
-  geom_point() + 
-  geom_smooth(method='lm')
-
 # All Maine data ----
 
 ## Simulate predictor variable
@@ -73,9 +69,9 @@ all_fish_data<-mass_total %>%
                    by='month'), 
          state='Maine'))
 
-ggplot(all_data, aes(x=month, y=fish_stock, color=state)) +
+ggplot(all_fish_data, aes(x=month, y=fish_stock, color=state)) +
   geom_point() + 
-  geom_smooth(method='lm')
+  geom_smooth()
 
 write.csv(all_fish_data, 
           './machine_learning/regression/dif_and_dif_data.csv', 
