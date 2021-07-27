@@ -104,7 +104,7 @@ ggplot(birth_data_week, aes(x=week, y=births)) +
 #
 ################################
 
-# Adjusting Temporal Data ---- 
+# 1. Adjusting Temporal Data ---- 
 
 # week
 
@@ -149,7 +149,7 @@ ggplot(birth_data_q, aes(x=quarter, y=births)) +
 
 # Try transforming the data to plot by year!
 
-# Year Over Year Comparisons ---- 
+# 2. Year Over Year Comparisons ---- 
 
 yoy_birth_data <- birth_data %>% 
   mutate(current_year=2014, 
@@ -163,7 +163,7 @@ yoy_birth_data <- birth_data %>%
          ), 
          current_date=as.Date(current_date), 
          current_week=floor_date(current_date, 'week'), 
-         before_2008=ifelse(year<2008, 
+         time_period=ifelse(year<2008, 
                             'Before 2008', 
                             'After 2008')
          
@@ -186,21 +186,27 @@ ggplot(filtered_yoy_births, aes(x=current_week, y=births, color=as.character(yea
 
 # Try adding some more years into this graph. Is this easier or harder to interpret?
 
-# Changing Buckets ---- 
+# 3. Changing Buckets ---- 
 
 before_after_2008<-yoy_birth_data %>% 
-  group_by(before_2008, current_week) %>% 
+  group_by(time_period, current_week) %>% 
   summarize(births=sum(births, na.rm=T)) %>% 
   filter(current_week > as.Date('2013-12-29') & 
            current_week < as.Date('2014-12-14')
          )  
 
-ggplot(before_after_2008, aes(x=current_week, y=births, color=before_2008)) + 
+ggplot(before_after_2008, aes(x=current_week, y=births, color=time_period)) + 
   geom_line(size=1.5) + 
   labs(title='Births by Week Before and After 2008', 
        x='Current Week', 
        y='Total Births', 
        color='Time Period')
+
+
+# Try adding an additional bucket to the time period bucket. 
+# The buckets will be before 2005, 2005 - 2009, and after 2010 - 2014. 
+# Rerun the above code with your new time_period variable. 
+# What do you see?
 
 
 

@@ -34,7 +34,10 @@ mass_1<-bind_cols(x,y) %>%
 
 ggplot(mass_1, aes(x=month, y=fish_stock)) +
   geom_point() + 
-  geom_smooth(method='lm')
+  geom_smooth(method='lm') + 
+  labs(title='Fish Stock in Maine and Massachusetts between 2000 and 2020', 
+       x='Month', 
+       y='Total Fish (in Millions)')
 
 
 # Second mass data set ----
