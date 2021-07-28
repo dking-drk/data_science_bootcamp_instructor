@@ -13,7 +13,7 @@ custom_theme <- theme(panel.background = element_rect(fill = "white"),
 
 births_raw_url="https://raw.githubusercontent.com/fivethirtyeight/data/master/births/US_births_2000-2014_SSA.csv"
 
-birth_data<-read_csv(url(births_raw_url)) %>%
+birth_data<-read.csv(url(births_raw_url)) %>%
   mutate(date=as.Date(paste0(year,
                              '-',
                              month,
@@ -35,7 +35,7 @@ birth_data<-read_csv(url(births_raw_url)) %>%
 
 births_raw_url="https://raw.githubusercontent.com/fivethirtyeight/data/master/births/US_births_2000-2014_SSA.csv"
 
-birth_data<-read_csv(url(births_raw_url)) %>%
+birth_data<-read.csv(url(births_raw_url)) %>%
   mutate(date=as.Date(paste0(year,
                              '-',
                              month,
@@ -75,7 +75,7 @@ ggplot(birth_data, aes(x=births)) +
 
 git_grad='https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/recent-grads.csv'
 
-recent_grad_data<-read_csv(url(git_grad))
+recent_grad_data<-read.csv(url(git_grad))
 
 # Scatter Plot ----
 

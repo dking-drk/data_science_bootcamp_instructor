@@ -34,10 +34,7 @@ mass_1<-bind_cols(x,y) %>%
 
 ggplot(mass_1, aes(x=month, y=fish_stock)) +
   geom_point() + 
-  geom_smooth(method='lm') + 
-  labs(title='Fish Stock in Maine and Massachusetts between 2000 and 2020', 
-       x='Month', 
-       y='Total Fish (in Millions)')
+  geom_smooth(method='lm') 
 
 
 # Second mass data set ----
@@ -80,7 +77,10 @@ all_fish_data<-mass_total %>%
               mutate(month=seq(from=as.Date('2000-01-01'), 
                                to=as.Date('2020-02-01'), 
                                by='month'), 
-                     state='Maine'))
+                     state='Maine')) + 
+  labs(title='Fish Stock in Maine and Massachusetts between 2000 and 2020', 
+       x='Month', 
+       y='Total Fish (in Millions)')
 
 ggplot(all_fish_data, aes(x=month, y=fish_stock, color=state)) +
   geom_point() + 
@@ -132,7 +132,7 @@ ggplot(total_anscombe, aes(x=total_x, y=total_y)) +
 
 births_raw_url="https://raw.githubusercontent.com/fivethirtyeight/data/master/births/US_births_2000-2014_SSA.csv"
 
-birth_data<-read_csv(url(births_raw_url)) %>%
+birth_data<-read.csv(url(births_raw_url)) %>%
   mutate(date=as.Date(paste0(year,
                              '-',
                              month,
@@ -146,11 +146,11 @@ birth_data<-read_csv(url(births_raw_url)) %>%
 
 my_base_plot<-ggplot(birth_data, aes(x=date, y=births))
 
+my_base_plot
+
 # What does aes() stand for?
 
 ?aes()
-
-my_base_plot
 
 # Copy and paste this plot into the session slack!
 
