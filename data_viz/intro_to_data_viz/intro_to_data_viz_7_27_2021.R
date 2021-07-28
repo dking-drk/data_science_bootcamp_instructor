@@ -130,6 +130,18 @@ ggplot(total_anscombe, aes(x=total_x, y=total_y)) +
 #
 ################################
 
+births_raw_url="https://raw.githubusercontent.com/fivethirtyeight/data/master/births/US_births_2000-2014_SSA.csv"
+
+birth_data<-read_csv(url(births_raw_url)) %>%
+  mutate(date=as.Date(paste0(year,
+                             '-',
+                             month,
+                             '-',
+                             date_of_month)
+  ), 
+  week=floor_date(date, 'week')
+  )
+
 # 1. The Plot ----
 
 my_base_plot<-ggplot(birth_data, aes(x=date, y=births))
