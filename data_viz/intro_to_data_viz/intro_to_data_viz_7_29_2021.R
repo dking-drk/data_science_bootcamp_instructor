@@ -23,7 +23,7 @@ birth_data<-read.csv(url(births_raw_url)) %>%
   week=floor_date(date, 'week')
   )
 
-# Create a line plot of births by week using the birth data data set. 
+# Create a line plot of births by day using the birth data data set. 
 
 ################################
 #
