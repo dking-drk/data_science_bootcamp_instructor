@@ -194,13 +194,21 @@ line_with_labels <- line_smoothed +
 line_with_labels
 
 # Do you think there is anything we can do to make these labels clearer? 
-# Change the subtitle and paste the plot into the session slack!
+# Change the label and paste the plot into the session slack!
+
+line_smoothed + 
+  labs(title='US Births by Day and Week 2000-2014', 
+       subtitle='Orange Shows in Week Average Births by Day \nDaily Total in Black', 
+       x='Day', 
+       y='Births')
 
 # 5. Adding horzontal lines ----
 
 ave_line_with_labels <- line_with_labels + 
-  geom_hline(yintercept=mean(birth_data$births, 
+  geom_hline(yintercept=c(mean(birth_data$births,
                              na.rm=T), 
+                          min(birth_data$births, 
+                              na.rm=T)), 
              color='white'
              )
 
@@ -211,7 +219,8 @@ ave_line_with_labels
 # 6. Adding vertical lines ----
 
 vert_ave_line_with_labels <- ave_line_with_labels + 
-  geom_vline(xintercept=c(as.Date('2008-01-01')), 
+  geom_vline(xintercept=c(as.Date('2008-01-01'), 
+                          as.Date('2014-01-01')), 
              color='red'
   )
 

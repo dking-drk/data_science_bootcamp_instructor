@@ -25,6 +25,9 @@ birth_data<-read.csv(url(births_raw_url)) %>%
 
 # Create a line plot of births by day using the birth data data set. 
 
+ggplot(birth_data, aes(x=date, y=births)) +
+  geom_line()
+
 ################################
 #
 # Basic Vizualizations in GGplot ----
