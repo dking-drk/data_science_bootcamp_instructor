@@ -77,14 +77,14 @@ all_fish_data<-mass_total %>%
               mutate(month=seq(from=as.Date('2000-01-01'), 
                                to=as.Date('2020-02-01'), 
                                by='month'), 
-                     state='Maine')) + 
-  labs(title='Fish Stock in Maine and Massachusetts between 2000 and 2020', 
-       x='Month', 
-       y='Total Fish (in Millions)')
+                     state='Maine')) 
 
 ggplot(all_fish_data, aes(x=month, y=fish_stock, color=state)) +
   geom_point() + 
   geom_smooth() + 
+  labs(title='Fish Stock in Maine and Massachusetts between 2000 and 2020', 
+       x='Month', 
+       y='Total Fish (in Millions)') +
   custom_theme
 
 # Anscombs Quartet ----
