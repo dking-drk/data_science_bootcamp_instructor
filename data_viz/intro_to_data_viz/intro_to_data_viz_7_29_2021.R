@@ -11,22 +11,14 @@ custom_theme <- theme(panel.background = element_rect(fill = "white"),
 
 # Warm up! ----
 
-births_raw_url="https://raw.githubusercontent.com/fivethirtyeight/data/master/births/US_births_2000-2014_SSA.csv"
+# Warm up! ----
 
-birth_data<-read.csv(url(births_raw_url)) %>%
-  mutate(date=as.Date(paste0(year,
-                             '-',
-                             month,
-                             '-',
-                             date_of_month)
-  ), 
-  week=floor_date(date, 'week')
-  )
+git_grad='https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/recent-grads.csv'
 
-# Create a line plot of births by day using the birth data data set. 
+recent_grad_data<-read.csv(url(git_grad))
 
-ggplot(birth_data, aes(x=date, y=births)) +
-  geom_line()
+# Create a scatter plot with a smoothed plot layered on top from the recent_grad_data data frame. 
+# Use the ShareWomen variable as your x axis and the Median variable as your y axis.
 
 ################################
 #

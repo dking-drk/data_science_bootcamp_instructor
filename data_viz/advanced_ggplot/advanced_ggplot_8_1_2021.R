@@ -9,15 +9,6 @@ custom_theme <- theme(panel.background = element_rect(fill = "white"),
                       plot.title=element_text(family="inherit", size = "13")
 )
 
-# Warm up! ----
-
-git_grad='https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/recent-grads.csv'
-
-recent_grad_data<-read.csv(url(git_grad))
-
-# Create a scatter plot with a smoothed plot layered on top from the recent_grad_data data frame. 
-# Use the ShareWomen variable as your x axis and the Median variable as your y axis.
-
 ################################
 #
 # Adjusting Plot Outputs ----
@@ -28,7 +19,9 @@ recent_grad_data<-read.csv(url(git_grad))
 
 births_raw_url="https://raw.githubusercontent.com/fivethirtyeight/data/master/births/US_births_2000-2014_SSA.csv"
 
-birth_data_week<-read.csv(url(births_raw_url)) %>%
+birth_data<-read.csv(url(births_raw_url)) 
+
+birth_data_week <- birth_data %>%
   mutate(date=as.Date(paste0(year,
                              '-',
                              month,
@@ -62,3 +55,21 @@ ggplot(recent_grad_data, aes(x=ShareWomen, y=Median)) +
               shape=21, # This changes the shape of the point
               stroke=2 # This argument changes the width of the line around the point
   )
+
+# Change the shape and alpha to whatever numbers you want. Do you think this makes for a better plot?
+
+# Adjusting Bar Plots ----
+
+birth_data_year<-birth_data %>% 
+  group_by(year) %>% 
+  summarize(births=sum(births, na.rm=T)
+            )
+
+ggplot(birth_data_year, aes(x=year, y=births)) + 
+  geom_bar(stat='identity', 
+           color='black', 
+           fill='orange', 
+           width=.75,
+           alpha=.5)
+  
+
