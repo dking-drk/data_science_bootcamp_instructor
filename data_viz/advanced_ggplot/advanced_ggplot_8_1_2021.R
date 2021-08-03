@@ -32,6 +32,15 @@ birth_data<-read.csv(url(births_raw_url)) %>%
 
 # Using the birth_data data frame, create a new data frame aggregating births by month and then create a line plot. 
 
+month_birth_data <- birth_data %>% 
+  mutate(month=floor_date(date, 'month')) %>% 
+  group_by(month) %>% 
+  summarize(ave_births=mean(births, na.rm=T))
+
+ggplot(month_birth_data, aes(x=month, y=ave_births)) + 
+  geom_line(size=1.5)
+
+
 ################################
 #
 # Preparing Data for Visualization ----
@@ -41,7 +50,7 @@ birth_data<-read.csv(url(births_raw_url)) %>%
 # 2. Year Over Year Comparisons ---- 
 
 yoy_birth_data <- birth_data %>% 
-  mutate(current_year=2014, 
+  mutate(current_year=max(birth_data$year, na.rm=T), 
          year_dif=current_year-year, 
          current_date=ifelse(year_dif==0, 
                              as.character(date), 
@@ -52,17 +61,19 @@ yoy_birth_data <- birth_data %>%
          ), 
          current_date=as.Date(current_date), 
          current_week=floor_date(current_date, 'week'), 
-         time_period=ifelse(year<2008, 
-                            'Before 2008', 
-                            'After 2008')
-         
-  ) 
+         time_period=ifelse(year<2005, 
+                            'Before 2005',
+                            ifelse(year >= 2005 & year < 2010, 
+                                   '2005-2010', 
+                                   'After 2010')
+                                   )
+         ) 
 
 filtered_yoy_births <- yoy_birth_data %>% 
   group_by(year, current_week) %>% 
   summarize(births=sum(births, na.rm=T)
   ) %>% 
-  filter(year >= 2012 & 
+  filter(year >= 2010 & 
            current_week > as.Date('2013-12-29') & 
            current_week < as.Date('2014-12-28')) 
 
@@ -79,7 +90,7 @@ ggplot(filtered_yoy_births, aes(x=current_week, y=births, color=as.character(yea
 
 before_after_2008<-yoy_birth_data %>% 
   group_by(time_period, current_week) %>% 
-  summarize(births=sum(births, na.rm=T)) %>% 
+  summarize(births=mean(births, na.rm=T)) %>% 
   filter(current_week > as.Date('2013-12-29') & 
            current_week < as.Date('2014-12-14')
   )  
@@ -88,7 +99,7 @@ ggplot(before_after_2008, aes(x=current_week, y=births, color=time_period)) +
   geom_line(size=1.5) + 
   labs(title='Births by Week Before and After 2008', 
        x='Current Week', 
-       y='Total Births', 
+       y='Average Births', 
        color='Time Period')
 
 
@@ -106,14 +117,6 @@ ggplot(before_after_2008, aes(x=current_week, y=births, color=time_period)) +
 # 1. Adjusting Line Chart Outputs ----
 
 birth_data_week <- birth_data %>%
-  mutate(date=as.Date(paste0(year,
-                             '-',
-                             month,
-                             '-',
-                             date_of_month)
-  ), 
-  week=floor_date(date, 'week')
-  ) %>% 
   group_by(week) %>% 
   summarize(births=sum(births, na.rm=T)
             ) %>% 
