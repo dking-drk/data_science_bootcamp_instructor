@@ -20,6 +20,10 @@ recent_grad_data<-read.csv(url(git_grad))
 # Create a scatter plot with a smoothed plot layered on top from the recent_grad_data data frame. 
 # Use the ShareWomen variable as your x axis and the Median variable as your y axis.
 
+ggplot(recent_grad_data, aes(x=ShareWomen, y=Median)) + 
+  geom_smooth() + 
+  geom_point() 
+
 ################################
 #
 # Basic Vizualizations in GGplot ----
@@ -61,7 +65,7 @@ birth_data_year <- birth_data %>%
 # Historgams ----
 
 ggplot(birth_data, aes(x=births)) + 
-  geom_histogram() + 
+  geom_histogram(binwidth = 500) + 
   labs(title='Histogram of Births by Day', 
        x='Total Births', 
        y='Count')
@@ -85,7 +89,8 @@ ggplot(recent_grad_data, aes(x=ShareWomen, y=Median)) +
 # Smoothed Plot ----
 
 ggplot(birth_data_week, aes(x=week, y=births)) + 
-  geom_smooth() + 
+  geom_line() +
+  geom_smooth(method = 'loess') + 
   labs(title='US Births by Week 2000 - 2014', 
        x='Week', 
        y='Total Births')
@@ -142,7 +147,20 @@ ggplot(birth_data_q, aes(x=quarter, y=births)) +
        x='Quarter', 
        y='Total Births')
 
-# Try transforming the data to plot by year!
+# Try transforming the data to plot by year! --- birth_data_year
+
+birth_data_year <- birth_data %>% 
+  mutate(year=floor_date(date, 'year')) %>%
+  group_by(year) %>% 
+  summarize(births=sum(births, na.rm=T)
+  )
+
+ggplot(birth_data_year, aes(x=year, y=births)) + 
+  geom_line() + 
+  labs(title='US Births by Year 2000 - 2014', 
+       x='Year', 
+       y='Total Births')
+
 
 # 2. Year Over Year Comparisons ---- 
 
