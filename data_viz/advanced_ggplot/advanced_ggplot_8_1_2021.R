@@ -124,10 +124,13 @@ birth_data_week <- birth_data %>%
            week < as.Date('2014-12-28'))
 
 ggplot(birth_data_week, aes(x=week, y=births)) + 
-  geom_line(size=.5, #This is the argument to change the width of the line
-            color='blue', #This is the argument to change the color of the line, colors are (red, blue, green, yellow, black, white, etc)
+  geom_line(size=1.5, #This is the argument to change the width of the line
+            color='black', #This is the argument to change the color of the line, colors are (red, blue, green, yellow, black, white, etc)
             linetype='solid' # Line types are dashed, solid, dotted, dotdash, longdash, twodash
-            )
+            ) + 
+  labs(title='Births by Week 2000 - 2014', 
+       x='weeks', 
+       y='Births')
 
 # 1. Add labels to the plot above. 
 # 2. Change the linetype to dashed and the size to 3. Does this make the plot any better? 
@@ -138,8 +141,8 @@ ggplot(recent_grad_data, aes(x=ShareWomen, y=Median)) +
   geom_point(size=2, #This is the argument to change the size of the point
               color='black', #This is the argument to change the color of the point, colors are (red, blue, green, yellow, black, white, etc)
               fill='yellow', # This argument changes the inside of the point, when the shape has an inside and outside 
-              alpha=.5, # This argument changes the transparency
-              shape=21, # This changes the shape of the point
+              alpha=.2, # This argument changes the transparency
+              shape=0, # This changes the shape of the point
               stroke=2 # This argument changes the width of the line around the point
   )
 
@@ -154,8 +157,8 @@ birth_data_year<-birth_data %>%
 
 ggplot(birth_data_year, aes(x=year, y=births)) + 
   geom_bar(stat='identity', 
-           color='black', 
-           fill='orange', 
+           color='red', 
+           fill='white', 
            width=.75,
            alpha=.5)
 
@@ -172,18 +175,6 @@ ggplot(recent_grad_data, aes(x=ShareWomen, y=Median)) +
             vjust = 1.5) # Directional adjustment around the point 
 
 # Try labeling with the Major_category column. Do you think this helps tell your story better?
-
-# 5. HTML colors
-
-ggplot(recent_grad_data, aes(x=ShareWomen, y=Median)) + 
-  geom_point(size=3, 
-             shape=21, 
-             color='#4c6a2f', 
-             fill='#ffffff', 
-             stroke=1.1)
-
-# Play around with the fill and color using the html color picker here https://www.w3schools.com/colors/colors_picker.asp. 
-# Then post it in the session-slack!
 
 # 5. HTML colors
 
