@@ -171,8 +171,8 @@ birth_day_month<-birth_data %>%
                                    'Friday', 
                                    'Saturday', 
                                    'Sunday')
-                        )
-         ) %>%
+         )
+  ) %>%
   group_by(month_name, weekday) %>% 
   summarize(ave_births=mean(births, na.rm=T)) %>% 
   ungroup() 
@@ -203,9 +203,9 @@ quarter_births <- birth_data %>%
                                ifelse(month %in% c(9,10,11), 
                                       'Fall', 
                                       'Winter')
-                               )
                         )
-         )
+  )
+  )
 
 ggplot(quarter_births, aes(x=seasons, births)) + 
   geom_violin(draw_quantiles=c(0.25, 0.5, 0.75), 
@@ -237,8 +237,8 @@ many_births <- birth_data %>%
 ggplot(many_births, aes(x=births, 
                         fill = weekday, 
                         color = weekday
-                        )
-       )+
+)
+)+
   geom_density(alpha = 0.1) + 
   labs(title='Births by Weekday in August (Density)', 
        x='Total Births', 
@@ -246,7 +246,7 @@ ggplot(many_births, aes(x=births,
   custom_theme 
 
 # Remove Saturday and Sunday from the chart and then post the new chart in the session slack.
-  
+
 # Geospatial Plots 1 ----
 
 #https://rstudio.github.io/leaflet/
