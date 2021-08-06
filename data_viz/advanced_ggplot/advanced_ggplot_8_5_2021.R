@@ -33,6 +33,7 @@ birth_data<-read.csv(url(births_raw_url)) %>%
 
 # Using the births data data set, create a line plot by week and births and then use year as the color line. Post you plot in the sessions slack. 
 
+
 ################################
 #
 # Adjusting Plot Outputs ----
@@ -44,27 +45,28 @@ birth_data<-read.csv(url(births_raw_url)) %>%
 ggplot(recent_grad_data, aes(x=ShareWomen, y=Median)) + 
   geom_point(size=3, 
              shape=21, 
-             color='#4c6a2f', 
+             color='#00b3b3', 
              fill='#ffffff', 
              stroke=1.1)
 
 # Play around with the fill and color using the html color picker here https://www.w3schools.com/colors/colors_picker.asp. 
 # Then post it in the session-slack!
 
-# 5. Cleaning Axis labeling
+# 5. Cleaning Axis labeling ----
 
 median_major_category <- recent_grad_data %>% 
   group_by(Major_category) %>% 
   summarize(median_income=median(Median, na.rm=T))
 
-ggplot(median_major_category, aes(x=reorder(Major_category, 
-                                            -median_income), 
+ggplot(median_major_category, aes(x=reorder(Major_category,
+                                            -median_income),
                                   y=median_income)
 ) + 
   geom_bar(stat='identity') + 
   theme(axis.text.x=element_text(angle=45, # The angle of the labels in relation to the x axis itself
                                  hjust=1, # Horizontal adjustment up or down of labels
-                                 color='black') # Color of text labels
+                                 color='black', 
+                                 size=6) # Color of text labels
   ) + 
   scale_y_continuous(label=comma) + 
   labs(title='Median Income by Major Category', 
@@ -72,7 +74,7 @@ ggplot(median_major_category, aes(x=reorder(Major_category,
        y='Median Income After Graduation') + 
   custom_theme
 
-# Change the angle of the batr plot to 90. Does this help the vizualization?
+# Change the angle of the bar plot to 90. Does this help the vizualization?
 
 
 ################################
@@ -127,7 +129,8 @@ ggplot(drinks_ag_region,
            fill=region
        )
 ) + 
-  geom_bar(stat='identity', position='dodge') +
+  geom_bar(stat='identity', position='dodge'
+           ) +
   labs(title='Average Alcohol Consumption Per Serving by Region and Type', 
        x='Alcohol Type', 
        y='Average Alcohol per serving', 
@@ -140,9 +143,9 @@ ggplot(drinks_ag_region,
 
 ggplot(recent_grad_data, aes(x=ShareWomen, y=Median, color=Unemployment_rate)) + 
   geom_point(size=2, alpha=.5) + 
-  # scale_color_gradient(low="white",
-  #                       high="red") + 
-  scale_color_viridis_c(option = "magma") + 
+  scale_color_gradient(low="white",
+                        high="red") +
+  #scale_color_viridis_c(option = "magma") + 
   labs(title='The Effect of the Share of Women in a Major on Median Income and Unemployment Rate ', 
        x='Share of Women in Major', 
        y='Median Income After Graduation', 
