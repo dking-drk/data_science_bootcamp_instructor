@@ -1,0 +1,150 @@
+---
+title: "Example Markdown for Datascience Bootcamp"
+output: html_document
+---
+-------------------------------
+
+# This is Your First R Markdown!
+## You can now create interactive visualizations. 
+
+-------------------------------
+
+```{r setup, include=FALSE, echo=FALSE}
+
+# This first code chunk is just for set up. 
+
+# Include = False argument tells rstudio no to print any of this. 
+
+library(tidyverse)
+library(lubridate)
+library(datasets)
+library(scales)
+library(leaflet)
+library(plotly)
+options(scipen=999)
+
+custom_theme <- theme(panel.background = element_rect(fill = "white"),
+                      panel.grid.major = element_line(colour = "grey", size=0.5, linetype="dashed"),
+                      panel.border = element_rect(fill=NA, color="grey", size=0.5, linetype="solid"),
+                      plot.title=element_text(family="inherit", size = "13")
+)
+
+# Some initial data ----
+
+git_grad='https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/recent-grads.csv'
+
+recent_grad_data<-read.csv(url(git_grad))
+
+births_raw_url="https://raw.githubusercontent.com/fivethirtyeight/data/master/births/US_births_2000-2014_SSA.csv"
+
+birth_data<-read.csv(url(births_raw_url)) %>%
+  mutate(date=as.Date(paste0(year,
+                             '-',
+                             month,
+                             '-',
+                             date_of_month)
+  ), 
+  week=floor_date(date, 'week')
+  )
+
+```
+
+-------------------------------
+
+### Part 1: GGplot
+
+-------------------------------
+
+```{r One GGplot Element, echo=FALSE, warning=FALSE, message = FALSE}
+# We are going to create a heat map for births by month and weekday
+
+birth_day_month<-birth_data %>% 
+  mutate(weekday=weekdays(date),
+         month_name=month(date, label=T), 
+         weekday=factor(weekday, 
+                        levels = c('Monday', 
+                                   'Tuesday',
+                                   'Wednesday', 
+                                   'Thursday', 
+                                   'Friday', 
+                                   'Saturday', 
+                                   'Sunday')
+         )
+  ) %>%
+  group_by(month_name, weekday) %>% 
+  summarize(ave_births=mean(births, na.rm=T)) %>% 
+  ungroup() 
+
+tile_births<-ggplot(birth_day_month, 
+       aes(x=weekday, 
+           y=month_name, 
+           fill=ave_births)) + 
+  geom_tile() +
+  scale_fill_gradient(low="white", 
+                      high="red") + 
+  labs(title='Average Births by Month and Day of week', 
+       x='Weekday', 
+       y='Month', 
+       fill='Ave. Births') + 
+  custom_theme
+
+tile_births
+```
+
+-------------------------------
+
+### Part 2: Interactive Plots
+
+-------------------------------
+
+```{r Interactive Plots, echo=FALSE, warning=FALSE, message = FALSE}
+
+ggplotly(tile_births)
+
+```
+
+-------------------------------
+
+### Part 3: Show Code Output
+
+-------------------------------
+
+```{r pressure, warning=FALSE, message = FALSE}
+week_births<-birth_data %>% 
+  group_by(week) %>% 
+  summarize(births=sum(births, na.rm=T)) %>% 
+  filter(week>=as.Date('2000-01-01') & 
+           week<as.Date('2014-12-28'))
+
+# Getting started with Plotly ----
+
+plot_ly(week_births, x = ~week, 
+        text = ~paste("Week Date: ", week, 
+                      '\nBirths:', births)) %>% 
+  add_trace(y = ~births, 
+            name = 'Total Births', 
+            mode = 'lines') %>% 
+  layout(
+    title = "Total Births by Week, 2000 - 2014",
+    xaxis = list(
+      title = "Week"
+      ), 
+    yaxis = list(
+      title = "Total Births"
+      ) 
+  )
+```
+
+-------------------------------
+
+### Part 4: In Line Code
+
+-------------------------------
+
+You can also just write text like this when you want. You can also format in any number of ways. 
+
+Let's start by looking at bulleted lists:
+
+* This is a single bullet 
+  * This is a single sub-bullet
+* we can also add inline code, for instance average daily births over time was `r mean(birth_data$births, na.rm=T)`
