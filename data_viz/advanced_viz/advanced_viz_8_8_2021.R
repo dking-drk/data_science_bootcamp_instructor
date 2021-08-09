@@ -91,7 +91,7 @@ quarter_births <- birth_data %>%
   )
   )
 
-violin_births <- ggplot(quarter_births, aes(x=seasons, births)) + 
+violin_births <- ggplot(quarter_births, aes(x=seasons, y=births)) +
   geom_violin(draw_quantiles=c(0.25, 0.5, 0.75), 
               fill='#ff6666', 
               alpha=.5) + 
@@ -118,7 +118,9 @@ many_births <- birth_data %>%
                                    'Saturday', 
                                    'Sunday')
          )
-  )
+  ) %>% 
+  filter(weekday != 'Saturday' & 
+           weekday != 'Sunday')
 
 density_births <- ggplot(many_births, aes(x=births, 
                         fill = weekday, 
@@ -175,7 +177,8 @@ week_births<-birth_data %>%
 
 # Getting started with Plotly ----
 
-plot_ly(week_births, x = ~week, 
+plot_ly(week_births, 
+        x = ~week, 
         text = ~paste("Week Date: ", week, 
                       '\nBirths:', births)) %>% 
   add_trace(y = ~births, 
@@ -199,3 +202,5 @@ ggplotly(tile_births)
 
 # Using any of the other plots we created above, use ggplotly to make that plot interactive. 
 # Take a screen shot of the plot and post in the session-slack. 
+
+ggplotly(violin_births)
